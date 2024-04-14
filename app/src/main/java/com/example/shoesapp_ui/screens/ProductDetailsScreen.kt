@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -254,8 +255,26 @@ fun ProductDetailsContent(
                 text = "Color",
                 color = MediumText,
                 fontSize = 10.sp,
-
+                fontWeight = FontWeight.Bold,
+                style = TextStyle(
+                    platformStyle = PlatformTextStyle(
+                        includeFontPadding = false
+                    )
+                )
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp)
+                    .padding(horizontal = 22.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ){
+                //Product Color
+                //Product Color
+                //Product Color
+                //Product Color
+            }
         }
     }
 }
@@ -273,7 +292,7 @@ fun ProductSizeCard(
     val border = if (isSelected) 0.dp else 0.8.dp
 
     Text(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .border(width = border, color = Border, shape = RoundedCornerShape(12.dp))
             .background(backgroundColor)
