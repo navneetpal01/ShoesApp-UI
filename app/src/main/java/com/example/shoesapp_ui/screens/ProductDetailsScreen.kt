@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -16,8 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -37,7 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,12 +51,16 @@ import androidx.navigation.NavController
 import com.example.shoesapp_ui.R
 import com.example.shoesapp_ui.model.ProductUiModel
 import com.example.shoesapp_ui.ui.theme.Accent
+import com.example.shoesapp_ui.ui.theme.Alternative_1
+import com.example.shoesapp_ui.ui.theme.Alternative_2
 import com.example.shoesapp_ui.ui.theme.Background
 import com.example.shoesapp_ui.ui.theme.Border
 import com.example.shoesapp_ui.ui.theme.DarkText
+import com.example.shoesapp_ui.ui.theme.Favorite
 import com.example.shoesapp_ui.ui.theme.IconTint
 import com.example.shoesapp_ui.ui.theme.LightText
 import com.example.shoesapp_ui.ui.theme.MediumText
+import com.example.shoesapp_ui.ui.theme.Primary
 import com.example.shoesapp_ui.ui.theme.Product_1
 import com.example.shoesapp_ui.ui.theme.RegularText
 import com.example.shoesapp_ui.ui.theme.Shadow
@@ -226,25 +234,25 @@ fun ProductDetailsContent(
                 ProductSizeCard(
                     size = SIZE_38,
                     isSelected = selectedSize == SIZE_38
-                ){
+                ) {
                     selectedSize = SIZE_38
                 }
                 ProductSizeCard(
                     size = SIZE_38,
                     isSelected = selectedSize == SIZE_39
-                ){
+                ) {
                     selectedSize = SIZE_39
                 }
                 ProductSizeCard(
                     size = SIZE_38,
                     isSelected = selectedSize == SIZE_40
-                ){
+                ) {
                     selectedSize = SIZE_40
                 }
                 ProductSizeCard(
                     size = SIZE_38,
                     isSelected = selectedSize == SIZE_41
-                ){
+                ) {
                     selectedSize = SIZE_41
                 }
             }
@@ -269,11 +277,66 @@ fun ProductDetailsContent(
                     .padding(top = 6.dp)
                     .padding(horizontal = 22.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ){
-                //Product Color
-                //Product Color
-                //Product Color
-                //Product Color
+            ) {
+                ProductColor(
+                    color = product.color,
+                    isSelected = selectedColor == product.color
+                ) {
+                    selectedColor = product.color
+                }
+                ProductColor(
+                    color = Alternative_1,
+                    isSelected = selectedColor == Alternative_1
+                ) {
+                    selectedColor = Alternative_1
+                }
+                ProductColor(
+                    color = Alternative_2,
+                    isSelected = selectedColor == Alternative_2
+                ) {
+                    selectedColor = Alternative_2
+                }
+            }
+
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 22.dp),
+                text = "Introducing the \"Futurist Glide,\" a revolutionary sneaker designed for the modern urban explorer. Its sleek, aerodynamic silhouette is crafted from sustainable, high-performance materials, offering both unparalleled comfort and eco-conscious style. The upper features a unique, breathable mesh pattern, seamlessly integrated with adaptive lacing technology for a snug, custom fit.",
+                color = LightText,
+                fontSize = 12.sp,
+                lineHeight = 20.sp,
+                textAlign = TextAlign.Justify,
+                fontWeight = FontWeight.Light,
+                style = TextStyle(
+                    platformStyle = PlatformTextStyle(
+                        includeFontPadding = false
+                    )
+                )
+            )
+            Spacer(modifier = Modifier.weight(1.0f))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 24.dp)
+            ) {
+                //TODO - Add scale Animation
+                IconButton(
+                    onClick = {
+                        isFavourite != isFavourite
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (isFavourite) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                        contentDescription = "Favourite Icon",
+                        tint = if (isFavourite) Favorite else IconTint
+                    )
+                }
+            }
+            Button(onClick = { /*TODO*/ }) {
+                
             }
         }
     }
@@ -310,7 +373,26 @@ fun ProductSizeCard(
         )
 
     )
+}
 
+@Composable
+fun ProductColor(
+    modifier: Modifier = Modifier,
+    color: Color,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    val borderColor = if (isSelected) Primary else Color.Transparent
+    Box(
+        modifier = Modifier
+            .border(width = 0.5.dp, color = borderColor, shape = CircleShape)
+            .padding(3.dp)
+            .background(color = color, shape = CircleShape)
+            .size(12.dp)
+            .clickable(
+                onClick = onClick
+            )
+    )
 }
 
 
