@@ -5,4 +5,6 @@ object Constants {
     const val SIZE_39 = "39"
     const val SIZE_40 = "40"
     const val SIZE_41 = "41"
+
+     const val DURATION = 600
 }

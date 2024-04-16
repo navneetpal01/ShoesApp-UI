@@ -1,5 +1,9 @@
 package com.example.shoesapp_ui.screens
 
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,24 +15,30 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -66,11 +77,13 @@ import com.example.shoesapp_ui.ui.theme.RegularText
 import com.example.shoesapp_ui.ui.theme.Shadow
 import com.example.shoesapp_ui.ui.theme.ShoesAppUITheme
 import com.example.shoesapp_ui.ui.theme.Star
+import com.example.shoesapp_ui.utils.Constants.DURATION
 import com.example.shoesapp_ui.utils.Constants.SIZE_38
 import com.example.shoesapp_ui.utils.Constants.SIZE_39
 import com.example.shoesapp_ui.utils.Constants.SIZE_40
 import com.example.shoesapp_ui.utils.Constants.SIZE_41
 import com.example.shoesapp_ui.viewmodel.SharedViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -107,6 +120,59 @@ fun ProductDetailsContent(
     var isFavourite by remember { mutableStateOf(false) }
     var selectedColor by remember { mutableStateOf(product.color) }
 
+
+    var xOffset by remember { mutableStateOf(800.dp) }
+    var yOffset by remember { mutableStateOf(800.dp) }
+    var buttonScale by remember { mutableFloatStateOf(0f) }
+    var iconScale by remember { mutableFloatStateOf(0f) }
+    var sneakerScale by remember { mutableFloatStateOf(0.6f) }
+    var sneakerRotate by remember { mutableFloatStateOf(-60f) }
+
+    val animatedXOffset = animateDpAsState(
+        targetValue = xOffset,
+        label = "",
+        animationSpec = tween(durationMillis = DURATION, easing = FastOutLinearInEasing)
+    )
+    val animatedYOffset = animateDpAsState(
+        targetValue = yOffset,
+        label = "",
+        animationSpec = tween(durationMillis = DURATION, easing = FastOutLinearInEasing)
+    )
+    val animatedButtonScale = animateFloatAsState(
+        targetValue = buttonScale,
+        label = "",
+        animationSpec = tween(easing = FastOutLinearInEasing)
+    )
+    val animatedIconScale = animateFloatAsState(
+        targetValue = iconScale,
+        label = "",
+        animationSpec = tween(easing = FastOutLinearInEasing)
+    )
+    val animatedSneakerScale = animateFloatAsState(
+        targetValue = sneakerScale,
+        label = "",
+        animationSpec = tween(easing = FastOutLinearInEasing)
+    )
+    val animatedSneakerRotate = animateFloatAsState(
+        targetValue = sneakerRotate,
+        label = "",
+        animationSpec = tween(easing = FastOutLinearInEasing)
+    )
+
+    LaunchedEffect(true) {
+        delay(150)
+        xOffset = 140.dp
+        yOffset = -130.dp
+        sneakerScale = 1f
+        sneakerRotate = -30f
+        delay(400)
+        iconScale = 1f
+        delay(100)
+        buttonScale = 1f
+
+    }
+
+
     Box(
         modifier = modifier
             .background(Background)
@@ -114,7 +180,7 @@ fun ProductDetailsContent(
     ) {
         Box(
             modifier = Modifier
-                .offset(x = 140.dp, y = -130.dp)  //TODO Make it Animated
+                .offset(x = animatedXOffset.value, y = animatedYOffset.value)
                 .alpha(0.3f)
                 .size(400.dp)
                 .background(color = product.color, shape = CircleShape)
@@ -133,10 +199,16 @@ fun ProductDetailsContent(
                 tint = IconTint
             )
         }
-        Column {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ){
             Image(
-                modifier = Modifier // TODO add animation scale and offset
-                    .rotate(-30f)
+                modifier = Modifier
+                    .scale(animatedSneakerScale.value)
+                    .rotate(animatedSneakerRotate.value)
+                    .padding(end = 48.dp)
+                    .padding(top = 38.dp)
                     .size(320.dp),
                 painter = painterResource(id = product.imageResource),
                 contentDescription = "Product Image"
@@ -314,18 +386,20 @@ fun ProductDetailsContent(
                     )
                 )
             )
-            Spacer(modifier = Modifier.weight(1.0f))
+            Spacer(modifier = Modifier.height(50.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
-                    .padding(bottom = 24.dp)
+                    .padding(bottom = 24.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                //TODO - Add scale Animation
                 IconButton(
+                    modifier = Modifier
+                        .scale(animatedIconScale.value),
                     onClick = {
-                        isFavourite != isFavourite
+                        isFavourite = !isFavourite
                     }
                 ) {
                     Icon(
@@ -334,9 +408,30 @@ fun ProductDetailsContent(
                         tint = if (isFavourite) Favorite else IconTint
                     )
                 }
-            }
-            Button(onClick = { /*TODO*/ }) {
-                
+                Button(
+                    modifier = Modifier
+                        .scale(animatedButtonScale.value)
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .padding(start = 8.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Accent
+                    ),
+                    onClick = {
+
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ShoppingCart,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        text = "Add to cart"
+                    )
+                }
             }
         }
     }
@@ -384,7 +479,7 @@ fun ProductColor(
 ) {
     val borderColor = if (isSelected) Primary else Color.Transparent
     Box(
-        modifier = Modifier
+        modifier = modifier
             .border(width = 0.5.dp, color = borderColor, shape = CircleShape)
             .padding(3.dp)
             .background(color = color, shape = CircleShape)
