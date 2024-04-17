@@ -199,10 +199,7 @@ fun ProductDetailsContent(
                 tint = IconTint
             )
         }
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-        ){
+        Column{
             Image(
                 modifier = Modifier
                     .scale(animatedSneakerScale.value)
@@ -386,7 +383,7 @@ fun ProductDetailsContent(
                     )
                 )
             )
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 modifier = Modifier

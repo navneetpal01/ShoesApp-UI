@@ -27,8 +27,13 @@ fun ProductHorizontalList(
         contentPadding = PaddingValues(horizontal = 22.dp),
         horizontalArrangement = Arrangement.spacedBy(36.dp)
     ){
-        items(productList){ productList ->
-            //Product Card
+        items(productList){ product ->
+            ProductBigCard(
+                product = product,
+                onProductClick = {product ->
+                    onProductClick(product)
+                }
+            )
         }
     }
 }
