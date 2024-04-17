@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.shoesapp_ui.component.CategoriesList
 import com.example.shoesapp_ui.mock.generateProducts
 import com.example.shoesapp_ui.model.ProductUiModel
 import com.example.shoesapp_ui.ui.theme.MediumText
@@ -61,12 +62,13 @@ fun HomeContent(
         }
 
         item {
-            //Category List
-            
+            CategoriesList(
+                modifier = Modifier
+                    .padding(top = 28.dp)
+            )
         }
-
         item {
-            //Product horizontal list
+
 
         }
     }
