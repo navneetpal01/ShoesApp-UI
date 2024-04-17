@@ -59,6 +59,16 @@ fun HomeContent(
                 fontWeight = FontWeight.Medium
             )
         }
+
+        item {
+            //Category List
+            
+        }
+
+        item {
+            //Product horizontal list
+
+        }
     }
 
 }
